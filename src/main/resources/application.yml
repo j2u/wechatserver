@@ -1,0 +1,40 @@
+spring:
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+server:
+  tomcat:
+  uri-encoding: UTF-8
+#api配置
+openApi:
+  meizuWeather:
+    url: http://aider.meizu.com/app/weather/listWeather
+    requestType: GET
+    params1: cityIds
+  xiaomiWeather: https://weatherapi.market.xiaomi.com/wtr-v3/weather/all
+  express100:
+    url: http://www.kuaidi100.com/query
+    requestType: GET
+    params1: type
+    params2: postid
+  bingdict:
+    url: https://dict.bing.com.cn/api/http/v2/4154AA7A1FC54ad7A84A0236AA4DCAF3/en-us/zh-cn/
+    requestType: GET
+    params1: q
+    params2: format
+    jsonFormat: application/json
+    xmlFormat: application/xml
+#微信配置
+WeChat:
+  access_token:
+    url: https://api.weixin.qq.com/cgi-bin/token
+    params1:
+     key: grant_type
+     value: client_credential
+    params2:
+      key: appid
+      value: wxb72cc46de21b5c13
+    params3:
+      secret: 58536fcbb358b58c6ca042ca431cf7f6

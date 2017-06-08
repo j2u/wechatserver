@@ -4,10 +4,10 @@ import com.imchen.domain.HttpResponse;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by imchen on 2017/6/7.
+ * Created by imchen on 2017/6/8.
  */
 @Service
-public interface Express100Biz {
+public interface BingdictBiz {
 
-    HttpResponse query(String type,String postId);
+    public HttpResponse query(String word);
 }

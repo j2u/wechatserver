@@ -1,6 +1,8 @@
 package com.imchen.utils;
 
 import com.imchen.domain.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,21 +18,22 @@ import java.util.Vector;
  */
 public class HttpUtil {
 
-    public static  final String defaultEnconde="UTF-8";
+    public static  final String DEFAULT_ENCODING="UTF-8";
+    public static Logger logger= LoggerFactory.getLogger(HttpUtil.class);
 
-    public static HttpResponse sendGet(String requestUrl, String method, Map<String, String> parammeters, Map<String, String> properties) throws Exception {
+    public static HttpResponse send(String requestUrl, String method, Map<String, String> parameters, Map<String, String> properties) throws Exception {
         //对参数处理
-        if ("GET".equalsIgnoreCase(method) && parammeters != null) {
+        if ("GET".equalsIgnoreCase(method) && parameters != null) {
             StringBuffer param = new StringBuffer();
             int i = 0;
-            for (String key : parammeters.keySet()
+            for (String key : parameters.keySet()
                     ) {
                 if (i == 0) {
                     param.append("?");
                 } else {
                     param.append("&");
                 }
-                param.append(key).append("=").append(parammeters.get(key));
+                param.append(key).append("=").append(parameters.get(key));
                 i++;
             }
             requestUrl += param;
@@ -50,15 +53,15 @@ public class HttpUtil {
             }
         }
 
-        if ("POST".equalsIgnoreCase(method) && parammeters != null) {
+        if ("POST".equalsIgnoreCase(method) && parameters != null) {
             StringBuffer param = new StringBuffer();
-            for (String key : parammeters.keySet()
+            for (String key : parameters.keySet()
                     ) {
                 param.append("&");
-                param.append(key).append("=").append(parammeters.get(key));
+                param.append(key).append("=").append(parameters.get(key));
             }
 
-            connection.getOutputStream().write(param.toString().getBytes("UTF-8"));
+            connection.getOutputStream().write(param.toString().getBytes(DEFAULT_ENCODING));
             connection.getOutputStream().flush();
             connection.getOutputStream().close();
         }
@@ -68,24 +71,26 @@ public class HttpUtil {
     private static HttpResponse makeContent(String requestUrl,HttpURLConnection connection) throws IOException {
         HttpResponse responser=new HttpResponse();
         InputStream inputStream=connection.getInputStream();
-        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream,DEFAULT_ENCODING));
         Vector<String> vector=new Vector<String>();
         String line=null;
         StringBuffer buffer=new StringBuffer();
         while ((line=bufferedReader.readLine())!=null){
             buffer.append(line);
+            logger.info("read line from buffer:{}",line);
             vector.add(line);
         }
         bufferedReader.close();
-        String ecoding;
+        String encoding;
         if(connection.getContentEncoding()==null){
-            ecoding=defaultEnconde;
+            encoding=DEFAULT_ENCODING;
         }else{
-            ecoding=connection.getContentEncoding();
+            encoding=connection.getContentEncoding();
         }
-        responser.setEncode(ecoding);
+        String content=new String(buffer.toString().getBytes(encoding));
+        responser.setEncode(encoding);
         responser.setContentCollection(vector);
-        responser.setContent(new String(buffer.toString().getBytes(ecoding)));
+        responser.setContent(content);
         responser.setConnectionTimeout(connection.getConnectTimeout());
         responser.setContentType(connection.getContentType());
         responser.setDefaultPost(connection.getURL().getDefaultPort());
@@ -101,6 +106,7 @@ public class HttpUtil {
         responser.setResponseMessage(connection.getResponseMessage());
         responser.setUrlString(requestUrl);
         responser.setUserInfo(connection.getURL().getUserInfo());
+        logger.info("response charset:{} response info:{}",encoding,content);
         return responser;
     }
 

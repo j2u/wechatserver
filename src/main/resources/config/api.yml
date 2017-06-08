@@ -1,14 +1,18 @@
 openApi:
   meizuWeather:
     url: http://aider.meizu.com/app/weather/listWeather
-    key1: cityIds
+    requestType: GET
+    params1: cityIds
   xiaomiWeather: https://weatherapi.market.xiaomi.com/wtr-v3/weather/all
   express100:
     url: http://www.kuaidi100.com/query
-    key1: type
-    key2: postid
+    requestType: GET
+    params1: type
+    params2: postid
   bingdict:
     url: https://dict.bing.com.cn/api/http/v2/4154AA7A1FC54ad7A84A0236AA4DCAF3/en-us/zh-cn/
-    key1: q
+    requestType: GET
+    params1: q
+    params2: format
     jsonFormat: application/json
     xmlFormat: application/xml

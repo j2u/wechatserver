@@ -22,7 +22,7 @@ public class MeizuWeatherBizImpl implements MeizuWeatherBiz {
         map.put("cityIds",cityId);
         HttpResponse responser;
         try {
-            responser=HttpUtil.sendGet(MEIZUAPI,"get",map,null);
+            responser=HttpUtil.send(MEIZUAPI,"get",map,null);
         } catch (Exception e) {
             return null;
         }
