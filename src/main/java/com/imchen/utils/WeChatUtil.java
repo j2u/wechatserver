@@ -1,5 +1,13 @@
 package com.imchen.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 
 /**
@@ -7,6 +15,7 @@ import java.security.MessageDigest;
  */
 public class WeChatUtil {
     private static final String token="imchen";
+    private static Logger logger= LoggerFactory.getLogger(WeChatUtil.class);
 
     public static boolean checkSignature(String signature,String timestamp,String nonce){
         String[] arr=new String[]{token,timestamp,nonce};

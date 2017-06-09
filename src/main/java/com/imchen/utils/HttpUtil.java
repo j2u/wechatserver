@@ -4,6 +4,7 @@ import com.imchen.domain.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,6 +109,18 @@ public class HttpUtil {
         responser.setUserInfo(connection.getURL().getUserInfo());
         logger.info("response charset:{} response info:{}",encoding,content);
         return responser;
+    }
+
+    public static String saxRequest(HttpServletRequest request) throws IOException {
+        InputStream inputStream=request.getInputStream();
+        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream,DEFAULT_ENCODING));
+        String line ="";
+        StringBuffer buffer=new StringBuffer();
+        while ((line=bufferedReader.readLine())!=null){
+            logger.info("read line:{}",line);
+            buffer.append(line);
+        }
+        return buffer.toString();
     }
 
     public String sendPost(String requstUrl) {
