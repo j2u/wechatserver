@@ -4,9 +4,16 @@ spring:
       force: true
       charset: UTF-8
       enabled: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/WeCaht?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: chenyoyo
 server:
   tomcat:
   uri-encoding: UTF-8
+
+#mybaties
 #api配置
 openApi:
   meizuWeather:
@@ -38,3 +45,7 @@ WeChat:
       value: wxb72cc46de21b5c13
     params3:
       secret: 58536fcbb358b58c6ca042ca431cf7f6
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.imchen.mapper

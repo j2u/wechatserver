@@ -2,6 +2,7 @@ package com.imchen.controller;
 
 import com.imchen.service.WeChatBiz;
 import com.imchen.utils.WeChatUtil;
+import com.imchen.mapper.WeChatMessageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,13 @@ public class WeChatController {
     HttpServletRequest request;
     @Autowired
     WeChatBiz weChatBiz;
+    @Autowired
+    WeChatMessageMapper mapper;
 
     @RequestMapping(value = "/wechat", method = RequestMethod.POST)
-    public void saxMessage() {
+    public String saxMessage() {
         String userAgent = request.getHeader("User-Agent");
         logger.info("the request user agent:{}",userAgent);
-        weChatBiz.parseWeChatMessage(request);
+        return weChatBiz.parseWeChatMessage(request);
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imchen.mapper.WeChatMessageMapper" >
+    <resultMap id="BaseResultMap" type="com.imchen.domain.WeChatMessage" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="CreateTime" jdbcType="VARCHAR" />
+        <result column="content" property="Content" jdbcType="VARCHAR" />
+        <result column="description" property="Description" jdbcType="VARCHAR"/>
+        <result column="from_username" property="FromUserName" jdbcType="VARCHAR" />
+        <result column="to_username" property="ToUserName" jdbcType="VARCHAR" />
+        <result column="format" property="Format" jdbcType="VARCHAR" />
+        <result column="location_x" property="Location_X" jdbcType="VARCHAR" />
+        <result column="location_y" property="Location_Y" jdbcType="VARCHAR" />
+        <result column="label" property="Label" jdbcType="VARCHAR" />
+        <result column="msg_id" property="MsgId" jdbcType="VARCHAR" />
+        <result column="msg_type" property="MsgType" jdbcType="VARCHAR" />
+        <result column="media_id" property="MediaId" jdbcType="VARCHAR" />
+        <result column="pic_url" property="PicUrl" jdbcType="VARCHAR" />
+        <result column="recognition" property="Recognition" jdbcType="VARCHAR" />
+        <result column="map_scale" property="Scale" jdbcType="VARCHAR" />
+        <result column="title" property="Title" jdbcType="VARCHAR" />
+        <result column="url" property="Url" jdbcType="VARCHAR" />
+        <result column="thumb_mediaid" property="ThumbMediaId" jdbcType="VARCHAR" />
+        <result column="reply_time" property="replyTime" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        create_time,content,description,from_username,to_username,format,location_x,location_y,
+        label,msg_id,msg_type,media_id,pic_url,recognition,map_scale,title,url,thumb_mediaid,reply_time
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap"  >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM received_msg
+    </select>
+
+    <select id="getOne" parameterType="java.lang.String" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM received_msg
+        WHERE msg_id = #{msgId}
+    </select>
+
+    <insert id="insert" parameterType="com.imchen.domain.WeChatMessage" >
+        INSERT INTO
+        received_msg
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (#{createTime}, #{content}, #{description},#{fromUserName},#{toUserName},#{format},
+        #{location_X},#{location_Y},#{label},#{msgId},#{msgType},#{mediaId},#{picUrl},#{recognition},#{scale},
+        #{title},#{url},#{thumbMediaId},#{replyTime})
+    </insert>
+
+    <update id="update" parameterType="com.imchen.domain.WeChatMessage" >
+        UPDATE
+        received_msg
+        SET
+        <if test="content != null">from_username = #{fromUserName},</if>
+        <if test="msgId != null">to_username = #{toUserName},</if>
+        create_time=#{createTime},content=#{content},msg_id=#{msgId},msg_type = #{msgType},
+        description=#{description},format=#{format},location_x=#{location_X},location_Y=#{location_Y},
+        label=#{label},media_id=#{mediaId},pic_url=#{picUrl},recognition=#{recognition},
+        map_scale=#{scale},title=#{title},url=#{url},thumb_mediaid=#{thumbMediaId},reply_time=#{replyTime}
+        WHERE
+        msg_id = #{msgId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        DELETE FROM
+        received_msg
+        WHERE
+        msg_id =#{msgId}
+    </delete>
+</mapper>
