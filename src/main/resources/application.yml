@@ -49,3 +49,11 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.imchen.mapper
+#图灵api
+TuLing:
+  api:
+    url: http://www.tuling123.com/openapi/api
+    key: 3e5ec66738e561e94deaf5af11259c26
+    secret: e5e84686d09afbf2
+    param1: key
+    param2: text

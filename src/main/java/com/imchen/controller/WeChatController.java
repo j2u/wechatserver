@@ -35,8 +35,6 @@ public class WeChatController {
     HttpServletRequest request;
     @Autowired
     WeChatBiz weChatBiz;
-    @Autowired
-    WeChatMessageMapper mapper;
 
     @RequestMapping(value = "/wechat", method = RequestMethod.POST)
     public String saxMessage() {
