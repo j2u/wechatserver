@@ -5,6 +5,7 @@ import com.imchen.domain.WeChatMessage;
 import com.imchen.properties.TuLingProperties;
 import com.imchen.service.WeChatBiz;
 import com.imchen.utils.HttpUtil;
+import com.imchen.utils.TuRingUtils;
 import com.imchen.utils.WeChatUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,13 @@ public class WeChatBizImpl implements WeChatBiz {
         String responseContent = null;
         try {
             WeChatMessage message = WeChatUtil.parseXml(HttpUtil.saxRequest(request));
-            WeChatMessage answerMsg = new WeChatMessage();
-            answerMsg.setToUserName(message.getFromUserName());
-            answerMsg.setFromUserName(message.getToUserName());
-            answerMsg.setCreateTime(System.currentTimeMillis() + "");
-            answerMsg.setMsgType("text");
-            answerMsg.setContent("have been recive you message:" + message.getContent());
-            responseContent = WeChatUtil.makeTextModel(answerMsg);
+            String result=tulingChat(message.getContent());
+            WeChatMessage tuRingMsg= TuRingUtils.tuRingTuWeChat(result);
+            tuRingMsg.setToUserName(message.getFromUserName());
+            tuRingMsg.setFromUserName(message.getToUserName());
+            tuRingMsg.setMsgType(message.getMsgType());
+            tuRingMsg.setCreateTime(WeChatUtil.millisToDate(System.currentTimeMillis()));
+            responseContent = WeChatUtil.makeTextModel(tuRingMsg);
             System.out.println("response:" + responseContent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,6 +70,6 @@ public class WeChatBizImpl implements WeChatBiz {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return tuLingAnswer;
+        return responser.getContent();
     }
 }
