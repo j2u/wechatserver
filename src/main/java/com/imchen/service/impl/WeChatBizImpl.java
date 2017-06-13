@@ -2,6 +2,8 @@ package com.imchen.service.impl;
 
 import com.imchen.domain.HttpResponse;
 import com.imchen.domain.WeChatMessage;
+import com.imchen.domain.WeChatReplyMsg;
+import com.imchen.mapper.WeChatRPMsgMapper;
 import com.imchen.properties.TuLingProperties;
 import com.imchen.service.WeChatBiz;
 import com.imchen.utils.HttpUtil;
@@ -30,6 +32,8 @@ public class WeChatBizImpl implements WeChatBiz {
 
     @Autowired
     TuLingProperties tuLingProperties;
+    @Autowired
+    WeChatRPMsgMapper weChatRPMsgMapper;
 
     Logger logger= LoggerFactory.getLogger(WeChatBizImpl.class);
 
@@ -51,6 +55,11 @@ public class WeChatBizImpl implements WeChatBiz {
             e.printStackTrace();
         }
         return responseContent;
+    }
+
+
+    public WeChatReplyMsg getReplyMsg(String msgId){
+        return weChatRPMsgMapper.getByMsgId(msgId);
     }
 
     /**

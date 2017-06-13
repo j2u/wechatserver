@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.imchen.mapper.WeChatRPMsgMapper">
-    <resultMap id="BaseResultMap" type="com.imchen.mapper.WeChatRPMsgMapper">
+    <resultMap id="BaseResultMap" type="com.imchen.domain.WeChatReplyMsg">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="msg_id" property="content" jdbcType="INTEGER"/>
         <result column="rec_msg_id" property="recMsgId" jdbcType="VARCHAR"/>
@@ -17,7 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        msg_id,rec_msg_id,msg_type,content,media_id,title,description,music_url,
+        id,msg_id,rec_msg_id,msg_type,content,media_id,title,description,music_url,
         hq_music_url,thumb_media_id,reply_uid
     </sql>
 

@@ -35,12 +35,12 @@ public class WeChatRPMsgMapperTest {
     @Test
     public void insert() throws Exception {
         WeChatReplyMsg msg = new WeChatReplyMsg();
-        msg.setContent("test3");
+        msg.setContent("test");
         msg.setDescription("afdlsaf激發經濟結構");
         msg.setHqMusicUrl("fasfadfqqrwweqr");
         msg.setMediaId("asjflasjfsadf");
         msg.setRecMsgId("fadsfeeeee");
-        msg.setMsgId("test1");
+        msg.setMsgId("test2");
         msg.setMsgType("text");
         msg.setTitle("title");
         msg.setThumbMediaId("thhfhhf");

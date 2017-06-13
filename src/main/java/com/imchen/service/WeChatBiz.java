@@ -1,5 +1,6 @@
 package com.imchen.service;
 
+import com.imchen.domain.WeChatReplyMsg;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,4 +12,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface WeChatBiz {
 
     String parseWeChatMessage(HttpServletRequest request);
+    WeChatReplyMsg getReplyMsg(String msgId);
 }
