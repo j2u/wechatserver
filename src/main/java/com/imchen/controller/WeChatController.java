@@ -39,7 +39,7 @@ public class WeChatController {
     @RequestMapping(value = "/wechat", method = RequestMethod.POST)
     public String saxMessage() {
         String userAgent = request.getHeader("User-Agent");
-        logger.info("the request user agent:{}",userAgent);
+        logger.info("The request user agent:{}",userAgent);
         return weChatBiz.parseWeChatMessage(request);
     }
 }

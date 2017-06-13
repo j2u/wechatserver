@@ -1,7 +1,6 @@
 package com.imchen.mapper;
 
 import com.imchen.domain.WeChatMessage;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

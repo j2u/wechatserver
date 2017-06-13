@@ -8,6 +8,8 @@ import com.imchen.utils.HttpUtil;
 import com.imchen.utils.TuRingUtils;
 import com.imchen.utils.WeChatUtil;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,19 +31,22 @@ public class WeChatBizImpl implements WeChatBiz {
     @Autowired
     TuLingProperties tuLingProperties;
 
+    Logger logger= LoggerFactory.getLogger(WeChatBizImpl.class);
+
     @Override
     public String parseWeChatMessage(HttpServletRequest request) {
         String responseContent = null;
         try {
             WeChatMessage message = WeChatUtil.parseXml(HttpUtil.saxRequest(request));
-            String result=tulingChat(message.getContent());
+
+            String result=tuRingChat(message.getContent());//把微信的text類型信息交給TuRing Api解析
             WeChatMessage tuRingMsg= TuRingUtils.tuRingTuWeChat(result);
             tuRingMsg.setToUserName(message.getFromUserName());
             tuRingMsg.setFromUserName(message.getToUserName());
             tuRingMsg.setMsgType(message.getMsgType());
-            tuRingMsg.setCreateTime(WeChatUtil.millisToDate(System.currentTimeMillis()));
+            tuRingMsg.setCreateTime(System.currentTimeMillis()+"");
             responseContent = WeChatUtil.makeTextModel(tuRingMsg);
-            System.out.println("response:" + responseContent);
+            logger.info("response content:" + responseContent);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,24 +54,18 @@ public class WeChatBizImpl implements WeChatBiz {
     }
 
     /**
-     * use tuling api to chat with user
+     * TuRing api 聊天接口
      *
-     * @param msg
-     * @return
+     * @param msg 聊天內容
+     * @return String
      */
-    private String tulingChat(String msg) {
-        String tuLingAnswer = "";
-        int code;
+    private String tuRingChat (String msg) {
         HttpResponse responser = null;
         try {
             Map<String, String> paramsMap = new HashMap<>();
-            JSONObject json;
             paramsMap.put(tuLingProperties.getParam1(), tuLingProperties.getKey());
             paramsMap.put(tuLingProperties.getParam2(), msg);
             responser = HttpUtil.send(tuLingProperties.getUrl(), "POST", paramsMap, null);
-            json = new JSONObject(responser.getContent());
-            tuLingAnswer = (String) json.get("text");
-            code = (int) json.get("code");
         } catch (Exception e) {
             e.printStackTrace();
         }

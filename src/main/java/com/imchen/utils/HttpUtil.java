@@ -19,9 +19,19 @@ import java.util.Vector;
  */
 public class HttpUtil {
 
-    public static  final String DEFAULT_ENCODING="UTF-8";
-    public static Logger logger= LoggerFactory.getLogger(HttpUtil.class);
+    public static final String DEFAULT_ENCODING = "UTF-8";
+    public static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
+    /**
+     * 通用http請求方法
+     *
+     * @param requestUrl 請求url
+     * @param method     請求方式
+     * @param parameters 請求參數Map<String, String>
+     * @param properties 請求屬性
+     * @return HttpResponse
+     * @throws Exception
+     */
     public static HttpResponse send(String requestUrl, String method, Map<String, String> parameters, Map<String, String> properties) throws Exception {
         //对参数处理
         if ("GET".equalsIgnoreCase(method) && parameters != null) {
@@ -66,29 +76,37 @@ public class HttpUtil {
             connection.getOutputStream().flush();
             connection.getOutputStream().close();
         }
-        return makeContent(requestUrl,connection);
+        return makeContent(requestUrl, connection);
     }
 
-    private static HttpResponse makeContent(String requestUrl,HttpURLConnection connection) throws IOException {
-        HttpResponse responser=new HttpResponse();
-        InputStream inputStream=connection.getInputStream();
-        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream,DEFAULT_ENCODING));
-        Vector<String> vector=new Vector<String>();
-        String line=null;
-        StringBuffer buffer=new StringBuffer();
-        while ((line=bufferedReader.readLine())!=null){
+    /**
+     * 生成 HttpResponse 對象
+     *
+     * @param requestUrl 請求url
+     * @param connection HttpURLConnetion
+     * @return HttpResponse
+     * @throws IOException
+     */
+    private static HttpResponse makeContent(String requestUrl, HttpURLConnection connection) throws IOException {
+        HttpResponse responser = new HttpResponse();
+        InputStream inputStream = connection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, DEFAULT_ENCODING));
+        Vector<String> vector = new Vector<String>();
+        String line = null;
+        StringBuffer buffer = new StringBuffer();
+        while ((line = bufferedReader.readLine()) != null) {
             buffer.append(line);
-            logger.info("read line from buffer:{}",line);
+//            logger.info("read line from buffer:{}", line);
             vector.add(line);
         }
         bufferedReader.close();
         String encoding;
-        if(connection.getContentEncoding()==null){
-            encoding=DEFAULT_ENCODING;
-        }else{
-            encoding=connection.getContentEncoding();
+        if (connection.getContentEncoding() == null) {
+            encoding = DEFAULT_ENCODING;
+        } else {
+            encoding = connection.getContentEncoding();
         }
-        String content=new String(buffer.toString().getBytes(encoding));
+        String content = new String(buffer.toString().getBytes(encoding));
         responser.setEncode(encoding);
         responser.setContentCollection(vector);
         responser.setContent(content);
@@ -107,23 +125,32 @@ public class HttpUtil {
         responser.setResponseMessage(connection.getResponseMessage());
         responser.setUrlString(requestUrl);
         responser.setUserInfo(connection.getURL().getUserInfo());
-        logger.info("response charset:{} response info:{}",encoding,content);
+        logger.info("response charset:{} response content:{}", encoding, content);
         return responser;
     }
 
+    /**
+     * 解析http 請求
+     *
+     * @param request HttpServletRequest
+     * @return String
+     * @throws IOException
+     */
     public static String saxRequest(HttpServletRequest request) throws IOException {
-        InputStream inputStream=request.getInputStream();
-        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream,DEFAULT_ENCODING));
-        String line ="";
-        StringBuffer buffer=new StringBuffer();
-        while ((line=bufferedReader.readLine())!=null){
-            logger.info("read line:{}",line);
+        InputStream inputStream = request.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, DEFAULT_ENCODING));
+        String line = "";
+        StringBuffer buffer = new StringBuffer();
+        logger.info("開始解析消息");
+        while ((line = bufferedReader.readLine()) != null) {
+            logger.info(line);
             buffer.append(line);
         }
+        logger.info("解析完成");
         return buffer.toString();
     }
 
-    public String sendPost(String requstUrl) {
-        return null;
-    }
+//    public String sendPost(String requstUrl) {
+//        return null;
+//    }
 }

@@ -6,7 +6,7 @@ spring:
       enabled: true
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/WeCaht?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/wechat?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
     password: chenyoyo
 server:
@@ -56,4 +56,4 @@ TuLing:
     key: 3e5ec66738e561e94deaf5af11259c26
     secret: e5e84686d09afbf2
     param1: key
-    param2: text
+    param2: info

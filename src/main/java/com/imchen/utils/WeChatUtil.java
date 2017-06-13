@@ -19,8 +19,8 @@ import java.util.Iterator;
  */
 public class WeChatUtil {
     private static final String TOKEN = "imchen";
-    private static final String START_DATA = "<![CDATA[";
-    private static final String END_DATA = "]]>";
+//    private static final String START_DATA = "<![CDATA[";
+//    private static final String END_DATA = "]]>";
 
     private static final String TYPE_TEXT = "text";
     private static final String TYPE_IMAGE = "image";
@@ -82,6 +82,12 @@ public class WeChatUtil {
     }
 
 
+    /**
+     * 解析微信xml格式消息數據，轉換為WeChatMessage對象
+     * @param xmlStr 微信發送過來的xml消息數據
+     * @return WeChatMessage
+     * @throws Exception
+     */
     public static WeChatMessage parseXml(String xmlStr) throws Exception {
 //        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
 //        DocumentBuilder builder=factory.newDocumentBuilder();
@@ -104,11 +110,16 @@ public class WeChatUtil {
             Field field = c.getDeclaredField(element.getName());
             Method method = c.getDeclaredMethod("set" + element.getName(), field.getType());
             method.invoke(message, element.getText());
-            System.out.println("getName:" + element.getName() + " value:" + element.getStringValue());
+//            System.out.println("getName:" + element.getName() + " value:" + element.getStringValue());
         }
         return message;
     }
 
+    /**
+     * 生成xml文本
+     * @param message WeChatMessage
+     * @return 微信xml格式文本
+     */
     public static String makeTextModel(WeChatMessage message) {
         String currentModel = "";
         String commonModel = makeCommonText(message);
@@ -175,10 +186,10 @@ public class WeChatUtil {
     }
 
     /**
-     * make a common model text for message start content
+     * 生成微信xml文本通用頭部
      *
-     * @param message
-     * @return commonText
+     * @param message WeChatMessage
+     * @return commonText 通用頭文本
      */
     private static String makeCommonText(WeChatMessage message) {
         String commonText = "<xml>\n" +
@@ -189,6 +200,11 @@ public class WeChatUtil {
         return commonText;
     }
 
+    /**
+     * 將毫秒轉化為yyyy-MM-dd HH:mm:ss" 格式
+     * @param millis 毫秒
+     * @return 返回yyyy-MM-dd HH:mm:ss"格式的日期時間
+     */
     public static String millisToDate(long millis){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return simpleDateFormat.format(millis);

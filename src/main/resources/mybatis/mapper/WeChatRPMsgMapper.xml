@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imchen.mapper.WeChatRPMsgMapper">
+    <resultMap id="BaseResultMap" type="com.imchen.mapper.WeChatRPMsgMapper">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="msg_id" property="content" jdbcType="INTEGER"/>
+        <result column="rec_msg_id" property="recMsgId" jdbcType="VARCHAR"/>
+        <result column="msg_type" property="msgType" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="media_id" property="mediaId" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="music_url" property="musicUrl" jdbcType="VARCHAR"/>
+        <result column="hq_music_url" property="hqMusicUrl" jdbcType="VARCHAR"/>
+        <result column="thumb_media_id" property="thumbMediaId" jdbcType="VARCHAR"/>
+        <result column="reply_uid" property="replyUid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        msg_id,rec_msg_id,msg_type,content,media_id,title,description,music_url,
+        hq_music_url,thumb_media_id,reply_uid
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM reply_msg
+    </select>
+
+    <select id="getByMsgId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM reply_msg
+        WHERE msg_id=#{msgId}
+    </select>
+
+    <insert id="insert" parameterType="com.imchen.domain.WeChatReplyMsg">
+        INSERT INTO
+        reply_msg
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (#{msgId},#{recMsgId},#{msgType},#{content},#{mediaId},#{title},#{description},
+        #{musicUrl},#{hqMusicUrl},#{thumbMediaId},#{replyUid})
+    </insert>
+
+    <update id="update" parameterType="com.imchen.domain.WeChatReplyMsg">
+        UPDATE
+        reply_msg
+        SET
+        msg_id=#{msgId},rec_msg_id=#{recMsgId},msg_type=#{msgType},content=#{content},
+        media_id=#{mediaId},title=#{title},description=#{description},music_url=#{musicUrl},
+        hq_music_url=#{hqMusicUrl},thumb_media_id=#{thumbMediaId},reply_uid=#{replyUid}
+        WHERE
+        id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE
+        FROM
+        reply_msg
+        WHERE
+        msg_id=#{msgId}
+    </delete>
+</mapper>

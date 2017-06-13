@@ -2,7 +2,6 @@ package com.imchen.utils;
 
 import com.imchen.domain.Article;
 import com.imchen.domain.WeChatMessage;
-import com.imchen.ienum.TuRingMsgType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
