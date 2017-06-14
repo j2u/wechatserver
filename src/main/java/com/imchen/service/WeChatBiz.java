@@ -11,6 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface WeChatBiz {
 
-    String parseWeChatMessage(HttpServletRequest request);
+    String chat(HttpServletRequest request);
     WeChatReplyMsg getReplyMsg(String msgId);
 }

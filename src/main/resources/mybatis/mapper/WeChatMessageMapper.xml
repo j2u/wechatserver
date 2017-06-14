@@ -22,11 +22,13 @@
         <result column="url" property="Url" jdbcType="VARCHAR" />
         <result column="thumb_mediaid" property="ThumbMediaId" jdbcType="VARCHAR" />
         <result column="reply_time" property="replyTime" jdbcType="VARCHAR" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         create_time,content,description,from_username,to_username,format,location_x,location_y,
-        label,msg_id,msg_type,media_id,pic_url,recognition,map_scale,title,url,thumb_mediaid,reply_time
+        label,msg_id,msg_type,media_id,pic_url,recognition,map_scale,title,url,thumb_mediaid,
+        reply_time,ip
     </sql>
 
     <select id="getAll" resultMap="BaseResultMap"  >
@@ -49,7 +51,7 @@
         VALUES
         (#{createTime}, #{content}, #{description},#{fromUserName},#{toUserName},#{format},
         #{location_X},#{location_Y},#{label},#{msgId},#{msgType},#{mediaId},#{picUrl},#{recognition},#{scale},
-        #{title},#{url},#{thumbMediaId},#{replyTime})
+        #{title},#{url},#{thumbMediaId},#{replyTime},#{ip})
     </insert>
 
     <update id="update" parameterType="com.imchen.domain.WeChatMessage" >
@@ -61,7 +63,8 @@
         create_time=#{createTime},content=#{content},msg_id=#{msgId},msg_type = #{msgType},
         description=#{description},format=#{format},location_x=#{location_X},location_Y=#{location_Y},
         label=#{label},media_id=#{mediaId},pic_url=#{picUrl},recognition=#{recognition},
-        map_scale=#{scale},title=#{title},url=#{url},thumb_mediaid=#{thumbMediaId},reply_time=#{replyTime}
+        map_scale=#{scale},title=#{title},url=#{url},thumb_mediaid=#{thumbMediaId},
+        reply_time=#{replyTime},ip=#{ip}
         WHERE
         msg_id = #{msgId}
     </update>

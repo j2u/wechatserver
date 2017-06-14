@@ -3,6 +3,7 @@ package com.imchen.service.impl;
 import com.imchen.domain.HttpResponse;
 import com.imchen.domain.WeChatMessage;
 import com.imchen.domain.WeChatReplyMsg;
+import com.imchen.mapper.WeChatMessageMapper;
 import com.imchen.mapper.WeChatRPMsgMapper;
 import com.imchen.properties.TuLingProperties;
 import com.imchen.service.WeChatBiz;
@@ -33,34 +34,50 @@ public class WeChatBizImpl implements WeChatBiz {
     @Autowired
     TuLingProperties tuLingProperties;
     @Autowired
+    WeChatMessageMapper weChatMessageMapper;
+    @Autowired
     WeChatRPMsgMapper weChatRPMsgMapper;
 
-    Logger logger= LoggerFactory.getLogger(WeChatBizImpl.class);
+    Logger logger = LoggerFactory.getLogger(WeChatBizImpl.class);
 
     @Override
-    public String parseWeChatMessage(HttpServletRequest request) {
-        String responseContent = null;
-        try {
-            WeChatMessage message = WeChatUtil.parseXml(HttpUtil.saxRequest(request));
+    public String chat(HttpServletRequest request) {
+        //保存回复信息
+        WeChatMessage msg=parseWeChatMessage(request);
+        weChatRPMsgMapper.insert(msg);
+        return WeChatUtil.makeTextModel(msg);
+    }
 
-            String result=tuRingChat(message.getContent());//把微信的text類型信息交給TuRing Api解析
-            WeChatMessage tuRingMsg= TuRingUtils.tuRingTuWeChat(result);
-            tuRingMsg.setToUserName(message.getFromUserName());
-            tuRingMsg.setFromUserName(message.getToUserName());
-            tuRingMsg.setMsgType(message.getMsgType());
-            tuRingMsg.setCreateTime(System.currentTimeMillis()+"");
-            responseContent = WeChatUtil.makeTextModel(tuRingMsg);
-            logger.info("response content:" + responseContent);
+    @Override
+    public WeChatReplyMsg getReplyMsg(String msgId) {
+        return weChatRPMsgMapper.getByMsgId(msgId);
+    }
+
+    /**
+     *
+     * @param request 微信服务器请求过来的request
+     * @return 返回生成的WeChatMessage
+     */
+    public WeChatReplyMsg parseWeChatMessage(HttpServletRequest request) {
+        WeChatReplyMsg replyMsg=null;
+        try {
+            WeChatMessage recMsg = WeChatUtil.parseXml(HttpUtil.saxRequest(request));
+            //保存ip信息
+            recMsg.setIp(request.getRemoteAddr());
+            //保存消息
+            saveRecMsg(recMsg);
+            //把微信的text類型信息交給TuRing Api解析
+            replyMsg = TuRingUtils.tuRingTuWeChat(startTuRingChat(recMsg.getContent()));
+            replyMsg.setToUserName(message.getFromUserName());
+            replyMsg.setFromUserName(message.getToUserName());
+            replyMsg.setMsgType(message.getMsgType());
+            replyMsg.setCreateTime(System.currentTimeMillis() + "");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return responseContent;
+        return replyMsg;
     }
 
-
-    public WeChatReplyMsg getReplyMsg(String msgId){
-        return weChatRPMsgMapper.getByMsgId(msgId);
-    }
 
     /**
      * TuRing api 聊天接口
@@ -68,7 +85,7 @@ public class WeChatBizImpl implements WeChatBiz {
      * @param msg 聊天內容
      * @return String
      */
-    private String tuRingChat (String msg) {
+    private String startTuRingChat(String msg) {
         HttpResponse responser = null;
         try {
             Map<String, String> paramsMap = new HashMap<>();
@@ -79,5 +96,33 @@ public class WeChatBizImpl implements WeChatBiz {
             e.printStackTrace();
         }
         return responser.getContent();
+    }
+
+
+
+    /**
+     * 在線程中保存收到來自微信服務器的信息
+     * @param weChatMessage
+     */
+    private void saveRecMsg(WeChatMessage weChatMessage){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                weChatMessageMapper.insert(weChatMessage);
+            }
+        }).start();
+    }
+
+    /**
+     * 在線程中保存收到來自微信服務器的信息
+     * @param replyMsg 回覆給微信的消息
+     */
+    private void saveReplyMsg(WeChatReplyMsg replyMsg){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                weChatRPMsgMapper.insert(replyMsg);
+            }
+        }).start();
     }
 }

@@ -1,5 +1,8 @@
 package com.imchen.domain;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.stereotype.Repository;
+
 /**
  * Created by imchen on 2017/6/13.
  */

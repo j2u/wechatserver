@@ -29,6 +29,7 @@ public class WeChatMessage {
     private String Url; //消息链接
     private String ThumbMediaId; //视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
     private String replyTime;//
+    private String ip;//
 
     public WeChatMessage() {
     }
@@ -209,6 +210,14 @@ public class WeChatMessage {
         this.replyTime = replyTime;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     @Override
     public String toString() {
         return "WeChatMessage{" +
@@ -234,6 +243,7 @@ public class WeChatMessage {
                 ", Url='" + Url + '\'' +
                 ", ThumbMediaId='" + ThumbMediaId + '\'' +
                 ", replyTime='" + replyTime + '\'' +
+                ", ip='" + ip + '\'' +
                 '}';
     }
 }

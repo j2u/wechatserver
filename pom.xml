@@ -35,6 +35,11 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
 
         <!-- 支持 @ConfigurationProperties 注解 -->
         <dependency>

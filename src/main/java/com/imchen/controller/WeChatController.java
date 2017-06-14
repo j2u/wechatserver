@@ -37,7 +37,7 @@ public class WeChatController {
     public String saxMessage() {
         String userAgent = request.getHeader("User-Agent");
         logger.info("The request user agent:{}",userAgent);
-        return weChatBiz.parseWeChatMessage(request);
+        return weChatBiz.chat(request);
     }
 
     @RequestMapping(value = "/wechat/{msgId}",method = RequestMethod.GET)

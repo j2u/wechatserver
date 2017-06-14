@@ -2,6 +2,7 @@ package com.imchen.utils;
 
 import com.imchen.domain.Article;
 import com.imchen.domain.WeChatMessage;
+import com.imchen.domain.WeChatReplyMsg;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -84,6 +85,7 @@ public class WeChatUtil {
 
     /**
      * 解析微信xml格式消息數據，轉換為WeChatMessage對象
+     *
      * @param xmlStr 微信發送過來的xml消息數據
      * @return WeChatMessage
      * @throws Exception
@@ -117,6 +119,7 @@ public class WeChatUtil {
 
     /**
      * 生成xml文本
+     *
      * @param message WeChatMessage
      * @return 微信xml格式文本
      */
@@ -200,13 +203,36 @@ public class WeChatUtil {
         return commonText;
     }
 
+    public WeChatReplyMsg msgRecToReply(WeChatMessage weChatMessage) {
+        WeChatReplyMsg replyMsg=new WeChatReplyMsg();
+        replyMsg.setContent(weChatMessage.getContent());
+        replyMsg.setDescription(weChatMessage.getDescription());
+        replyMsg.setHqMusicUrl(weChatMessage.getUrl());
+        replyMsg.setMediaId(weChatMessage.getMediaId());
+        replyMsg.setRecMsgId(weChatMessage.getMsgId());
+        replyMsg.setMsgType(weChatMessage.getMsgType());
+        replyMsg.setThumbMediaId(weChatMessage.getThumbMediaId());
+        replyMsg.setTitle(weChatMessage.getTitle());
+        replyMsg.setMusicUrl(weChatMessage.getUrl());
+        replyMsg.setMsgId(generalMsgId(weChatMessage.getFromUserName()));
+        return null;
+    }
+
+
+    public String generalMsgId(String fromUserName){
+        String uid=fromUserName+"_"+System.currentTimeMillis()+"_"+Math.random();
+        return uid;
+    }
+
+
     /**
      * 將毫秒轉化為yyyy-MM-dd HH:mm:ss" 格式
+     *
      * @param millis 毫秒
      * @return 返回yyyy-MM-dd HH:mm:ss"格式的日期時間
      */
-    public static String millisToDate(long millis){
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String millisToDate(long millis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return simpleDateFormat.format(millis);
     }
 }
